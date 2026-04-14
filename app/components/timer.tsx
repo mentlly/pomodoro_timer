@@ -3,10 +3,16 @@ import React, { useState, useRef, useEffect } from 'react';
 import ReactMarkdown from 'react-markdown';
 
 export default function Timer() {
-    const [timer, setTimer] = useState(10);
+    const [timer, setTimer] = useState(25*60);
     const [isActive, setIsActive] = useState(false);
 
-    const toggleTimer = async () => {
+    const formatTime = (time: number) => {
+        const minutes = Math.floor(time/60);
+        const seconds = time%60;
+        return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`
+    };
+
+    const toggleTimer = () => {
         setIsActive(prev => !prev);
     };
 
@@ -26,7 +32,7 @@ export default function Timer() {
 
     return (
         <div>
-            <h1>{timer}</h1>
+            <h1>{formatTime(timer)}</h1>
             <button type='button' onClick={toggleTimer}>Start</button>
         </div>
     );
