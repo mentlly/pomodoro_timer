@@ -3,6 +3,8 @@ import React, { useState, useRef, useEffect, Dispatch, SetStateAction } from 're
 import ReactMarkdown from 'react-markdown';
 
 interface TimerProps {
+    isBreak: boolean,
+    setIsBreak: Dispatch<SetStateAction<boolean>>,
     fixedTimer: number,
     setFixedTimer: Dispatch<SetStateAction<number>>,
     timer: number,
@@ -11,18 +13,41 @@ interface TimerProps {
     setIsActive: Dispatch<SetStateAction<boolean>>
 };
 
-export default function TimerSettings({ fixedTimer, setFixedTimer, timer, setTimer, isActive, setIsActive }: TimerProps) {
+export default function TimerSettings({ isBreak, setIsBreak, fixedTimer, setFixedTimer, timer, setTimer, isActive, setIsActive }: TimerProps) {
     const [isOpen, setIsOpen] = useState(false);
-    const [minutes, setMinutes] = useState(Math.floor(fixedTimer/60));
-    const [seconds, setSeconds] = useState(fixedTimer%60);
+    const [studyMinutes, setStudyMinutes] = useState(25);
+    const [studySeconds, setStudySeconds] = useState(fixedTimer%60);
+    const [breakMinutes, setBreakMinutes] = useState(5);
+    const [breakSeconds, setBreakSeconds] = useState(0);
 
-    const ChangeTimer = () => {
-        const newFixedTimer = (Number((minutes*60))+Number(seconds));
+    const BreakTimer = async () => {
+        const breakTimer = (Number(breakMinutes*60)+Number(breakSeconds));
+        setIsActive(false);
+        if(isBreak) {
+            await setTimer(breakTimer);
+        }
+        setIsOpen(false);
+    };
+
+    const StudyTimer = async () => {
+        const newFixedTimer = (Number((studyMinutes*60))+Number(studySeconds));
         setFixedTimer(newFixedTimer);
-        setTimer(newFixedTimer);
+        if(!isBreak) {
+            await setTimer(newFixedTimer);
+        }
         setIsActive(false);
         setIsOpen(false);
     };
+
+    useEffect(() => {
+        if(!isBreak && timer === 0) {
+            StudyTimer();
+            setIsBreak(true);
+        } else if(isBreak && timer === 0) {
+            BreakTimer();
+            setIsBreak(false);
+        }
+    }, [timer]);
 
     return (
         <div>
@@ -30,18 +55,18 @@ export default function TimerSettings({ fixedTimer, setFixedTimer, timer, setTim
             {isOpen && (
                 <div className="modal-overlay">
                 <div className="modal-content">
-                    <h2>Timer Settings</h2>
-                    <form onSubmit={ChangeTimer}>
-                        <label>Set Custom Timer:</label>
+                    <h1>Timer Settings</h1>
+                    <form onSubmit={StudyTimer}>
+                        <label>Set Study Timer:</label>
                         <input 
                             type='number'
                             min={0}
                             max={60}
-                            value={minutes.toString().padStart(2,'0')}
+                            value={studyMinutes.toString().padStart(2,'0')}
                             onChange={(e) => {
                                 const val = e.target.value;
                                 if (val.length <= 2 || Number(val) <= 60) {
-                                    setMinutes(Number(val));
+                                    setStudyMinutes(Number(val));
                                 }
                             }} 
                             placeholder='Minutes'
@@ -50,11 +75,41 @@ export default function TimerSettings({ fixedTimer, setFixedTimer, timer, setTim
                             type='number' 
                             min={0}
                             max={59}
-                            value={seconds.toString().padStart(2,'0')}
+                            value={studySeconds.toString().padStart(2,'0')}
                             onChange={(e) => {
                                 const val = e.target.value;
                                 if (val.length <= 2 || Number(val) <= 59) {
-                                    setSeconds(Number(val));
+                                    setStudySeconds(Number(val));
+                                }
+                            }} 
+                            placeholder='Seconds'
+                        />
+                        <button type='submit'>Change Timer</button>
+                    </form>
+                    <form onSubmit={BreakTimer}>
+                        <label>Set Break Timer:</label>
+                        <input 
+                            type='number'
+                            min={0}
+                            max={60}
+                            value={breakMinutes.toString().padStart(2,'0')}
+                            onChange={(e) => {
+                                const val = e.target.value;
+                                if (val.length <= 2 || Number(val) <= 60) {
+                                    setBreakMinutes(Number(val));
+                                }
+                            }} 
+                            placeholder='Minutes'
+                        />
+                        <input 
+                            type='number' 
+                            min={0}
+                            max={59}
+                            value={breakSeconds.toString().padStart(2,'0')}
+                            onChange={(e) => {
+                                const val = e.target.value;
+                                if (val.length <= 2 || Number(val) <= 59) {
+                                    setBreakSeconds(Number(val));
                                 }
                             }} 
                             placeholder='Seconds'

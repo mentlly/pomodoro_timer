@@ -3,6 +3,8 @@ import React, { useState, useRef, useEffect, Dispatch, SetStateAction } from 're
 import ReactMarkdown from 'react-markdown';
 
 interface TimerProps {
+    isBreak: boolean,
+    setIsBreak: Dispatch<SetStateAction<boolean>>,
     fixedTimer: number,
     setFixedTimer: Dispatch<SetStateAction<number>>,
     timer: number,
@@ -11,7 +13,7 @@ interface TimerProps {
     setIsActive: Dispatch<SetStateAction<boolean>>
 };
 
-export default function Timer({ fixedTimer, setFixedTimer, timer, setTimer, isActive, setIsActive }: TimerProps) {
+export default function Timer({ isBreak, setIsBreak, fixedTimer, setFixedTimer, timer, setTimer, isActive, setIsActive }: TimerProps) {
 
     const formatTime = (time: number) => {
         const minutes = Math.floor(time/60);
@@ -28,6 +30,7 @@ export default function Timer({ fixedTimer, setFixedTimer, timer, setTimer, isAc
         setIsActive(prev => !prev);
     };
 
+    //Start and Pause Button and interval
     useEffect(() => {
         let interval: NodeJS.Timeout;
         if(isActive && timer > 0) {
