@@ -3,21 +3,25 @@ import React, { useState, useRef, useEffect, Dispatch, SetStateAction } from 're
 import ReactMarkdown from 'react-markdown';
 
 interface TimerProps {
-    globalTimer: number,
+    fixedTimer: number,
+    setFixedTimer: Dispatch<SetStateAction<number>>,
     timer: number,
     setTimer: Dispatch<SetStateAction<number>>,
     isActive: boolean,
     setIsActive: Dispatch<SetStateAction<boolean>>
 };
 
-export default function TimerSettings({ globalTimer, timer, setTimer, isActive, setIsActive }: TimerProps) {
+export default function TimerSettings({ fixedTimer, setFixedTimer, timer, setTimer, isActive, setIsActive }: TimerProps) {
     const [isOpen, setIsOpen] = useState(false);
-    const [minutes, setMinutes] = useState(0);
-    const [seconds, setSeconds] = useState(0);
+    const [minutes, setMinutes] = useState(Math.floor(fixedTimer/60));
+    const [seconds, setSeconds] = useState(fixedTimer%60);
 
     const ChangeTimer = () => {
+        const newFixedTimer = (Number((minutes*60))+Number(seconds));
+        setFixedTimer(newFixedTimer);
+        setTimer(newFixedTimer);
+        setIsActive(false);
         setIsOpen(false);
-        setTimer((minutes*60)+seconds);
     };
 
     return (
@@ -30,15 +34,29 @@ export default function TimerSettings({ globalTimer, timer, setTimer, isActive, 
                     <form onSubmit={ChangeTimer}>
                         <label>Set Custom Timer:</label>
                         <input 
-                            type='number' 
-                            value={minutes}
-                            onChange={(e) => setMinutes(Number(e.target.value))}
+                            type='number'
+                            min={0}
+                            max={60}
+                            value={minutes.toString().padStart(2,'0')}
+                            onChange={(e) => {
+                                const val = e.target.value;
+                                if (val.length <= 2 || Number(val) <= 60) {
+                                    setMinutes(Number(val));
+                                }
+                            }} 
                             placeholder='Minutes'
                         />
                         <input 
                             type='number' 
-                            value={seconds}
-                            onChange={(e) => setSeconds(Number(e.target.value))} 
+                            min={0}
+                            max={59}
+                            value={seconds.toString().padStart(2,'0')}
+                            onChange={(e) => {
+                                const val = e.target.value;
+                                if (val.length <= 2 || Number(val) <= 59) {
+                                    setSeconds(Number(val));
+                                }
+                            }} 
                             placeholder='Seconds'
                         />
                         <button type='submit'>Change Timer</button>

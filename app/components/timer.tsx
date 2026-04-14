@@ -3,14 +3,15 @@ import React, { useState, useRef, useEffect, Dispatch, SetStateAction } from 're
 import ReactMarkdown from 'react-markdown';
 
 interface TimerProps {
-    globalTimer: number,
+    fixedTimer: number,
+    setFixedTimer: Dispatch<SetStateAction<number>>,
     timer: number,
     setTimer: Dispatch<SetStateAction<number>>,
     isActive: boolean,
     setIsActive: Dispatch<SetStateAction<boolean>>
 };
 
-export default function Timer({ globalTimer, timer, setTimer, isActive, setIsActive }: TimerProps) {
+export default function Timer({ fixedTimer, setFixedTimer, timer, setTimer, isActive, setIsActive }: TimerProps) {
 
     const formatTime = (time: number) => {
         const minutes = Math.floor(time/60);
@@ -19,7 +20,7 @@ export default function Timer({ globalTimer, timer, setTimer, isActive, setIsAct
     };
 
     const resetTimer = () => {
-        setTimer(globalTimer);
+        setTimer(fixedTimer);
         setIsActive(false);
     };
 

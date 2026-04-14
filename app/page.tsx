@@ -5,21 +5,23 @@ import Timer from './components/timer'
 import TimerSettings from './components/timerSettings';
 
 export default function page() {
-  let globalTimer = 25*60;
-  const [timer, setTimer] = useState(globalTimer);
+  const [fixedTimer, setFixedTimer] = useState(25*60);
+  const [timer, setTimer] = useState(fixedTimer);
   const [isActive, setIsActive] = useState(false);
   return (
     <>
       <div>
         <Timer 
-        globalTimer={globalTimer}
+        fixedTimer={fixedTimer}
+        setFixedTimer={setFixedTimer}
         timer={timer}
         setTimer={setTimer}
         isActive={isActive}
         setIsActive={setIsActive}
         />
         <TimerSettings 
-        globalTimer={globalTimer}
+        fixedTimer={fixedTimer}
+        setFixedTimer={setFixedTimer}
         timer={timer}
         setTimer={setTimer}
         isActive={isActive}
