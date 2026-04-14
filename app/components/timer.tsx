@@ -12,6 +12,11 @@ export default function Timer() {
         return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`
     };
 
+    const resetTimer = () => {
+        setTimer(25*60);
+        setIsActive(false);
+    };
+
     const toggleTimer = () => {
         setIsActive(prev => !prev);
     };
@@ -33,7 +38,8 @@ export default function Timer() {
     return (
         <div>
             <h1>{formatTime(timer)}</h1>
-            <button type='button' onClick={toggleTimer}>Start</button>
+            <button type='button' onClick={toggleTimer}>{isActive? 'Pause': 'Start'}</button>
+            <button type='button' onClick={resetTimer}>Reset</button>
         </div>
     );
 };
