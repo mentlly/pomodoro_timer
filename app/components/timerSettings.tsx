@@ -15,37 +15,44 @@ interface TimerProps {
 
 export default function TimerSettings({ isBreak, setIsBreak, fixedTimer, setFixedTimer, timer, setTimer, isActive, setIsActive }: TimerProps) {
     const [isOpen, setIsOpen] = useState(false);
-    const [studyMinutes, setStudyMinutes] = useState(25);
-    const [studySeconds, setStudySeconds] = useState(fixedTimer%60);
-    const [breakMinutes, setBreakMinutes] = useState(5);
-    const [breakSeconds, setBreakSeconds] = useState(0);
+    const [studyMinutes, setStudyMinutes] = useState(0);
+    const [studySeconds, setStudySeconds] = useState(6);//change the timer in prod
+    const [breakMinutes, setBreakMinutes] = useState(0);
+    const [breakSeconds, setBreakSeconds] = useState(5);
 
-    const BreakTimer = async () => {
+    const BreakTimer = (e?: React.FormEvent) => {
+        if(e) e.preventDefault();
         const breakTimer = (Number(breakMinutes*60)+Number(breakSeconds));
-        setIsActive(false);
+        setFixedTimer(breakTimer);
         if(isBreak) {
-            await setTimer(breakTimer);
+            setTimer(breakTimer);
         }
+        setIsActive(false);
         setIsOpen(false);
     };
 
-    const StudyTimer = async () => {
-        const newFixedTimer = (Number((studyMinutes*60))+Number(studySeconds));
-        setFixedTimer(newFixedTimer);
+    const StudyTimer = (e?: React.FormEvent) => {
+        if(e) e.preventDefault();
+        const studyTimer = (Number((studyMinutes*60))+Number(studySeconds));
+        setFixedTimer(studyTimer);
         if(!isBreak) {
-            await setTimer(newFixedTimer);
+            setTimer(studyTimer);
         }
         setIsActive(false);
         setIsOpen(false);
     };
 
     useEffect(() => {
+        const studyTimer = (Number((studyMinutes*60))+Number(studySeconds));
+        const breakTimer = (Number(breakMinutes*60)+Number(breakSeconds));
         if(!isBreak && timer === 0) {
-            StudyTimer();
+            setTimer(breakTimer);
             setIsBreak(true);
+            setIsActive(false);
         } else if(isBreak && timer === 0) {
-            BreakTimer();
+            setTimer(studyTimer);
             setIsBreak(false);
+            setIsActive(false);
         }
     }, [timer]);
 
