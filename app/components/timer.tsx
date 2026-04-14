@@ -1,10 +1,16 @@
 "use client";
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, Dispatch, SetStateAction } from 'react';
 import ReactMarkdown from 'react-markdown';
 
-export default function Timer() {
-    const [timer, setTimer] = useState(25*60);
-    const [isActive, setIsActive] = useState(false);
+interface TimerProps {
+    globalTimer: number,
+    timer: number,
+    setTimer: Dispatch<SetStateAction<number>>,
+    isActive: boolean,
+    setIsActive: Dispatch<SetStateAction<boolean>>
+};
+
+export default function Timer({ globalTimer, timer, setTimer, isActive, setIsActive }: TimerProps) {
 
     const formatTime = (time: number) => {
         const minutes = Math.floor(time/60);
@@ -13,7 +19,7 @@ export default function Timer() {
     };
 
     const resetTimer = () => {
-        setTimer(25*60);
+        setTimer(globalTimer);
         setIsActive(false);
     };
 
