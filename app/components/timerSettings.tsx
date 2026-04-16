@@ -15,10 +15,10 @@ interface TimerProps {
 
 export default function TimerSettings({ isBreak, setIsBreak, fixedTimer, setFixedTimer, timer, setTimer, isActive, setIsActive }: TimerProps) {
     const [isOpen, setIsOpen] = useState(false);
-    const [studyMinutes, setStudyMinutes] = useState(0);
-    const [studySeconds, setStudySeconds] = useState(6);//change the timer in prod
-    const [breakMinutes, setBreakMinutes] = useState(0);
-    const [breakSeconds, setBreakSeconds] = useState(5);
+    const [studyMinutes, setStudyMinutes] = useState(Math.floor(fixedTimer/60));
+    const [studySeconds, setStudySeconds] = useState(fixedTimer%60);
+    const [breakMinutes, setBreakMinutes] = useState(5);
+    const [breakSeconds, setBreakSeconds] = useState(0);
 
     const BreakTimer = (e?: React.FormEvent) => {
         if(e) e.preventDefault();
