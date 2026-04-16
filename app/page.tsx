@@ -3,6 +3,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import ReactMarkdown from 'react-markdown';
 import Timer from './components/timer'
 import TimerSettings from './components/timerSettings';
+import TimerChange from './components/timerChange';
 
 export default function page() {
   const [isBreak, setIsBreak] = useState(false);
@@ -11,27 +12,32 @@ export default function page() {
   const [isActive, setIsActive] = useState(false);
   return (
     <>
+      <TimerChange
+        isBreak={isBreak}
+        setIsBreak={setIsBreak}
+      />
+      <br/>
       <h1>{isBreak ? "BREAK TIME" : "STUDY TIME"}</h1>
       <div>
         <Timer 
-        isBreak={isBreak}
-        setIsBreak={setIsBreak}
-        fixedTimer={fixedTimer}
-        setFixedTimer={setFixedTimer}
-        timer={timer}
-        setTimer={setTimer}
-        isActive={isActive}
-        setIsActive={setIsActive}
+          isBreak={isBreak}
+          setIsBreak={setIsBreak}
+          fixedTimer={fixedTimer}
+          setFixedTimer={setFixedTimer}
+          timer={timer}
+          setTimer={setTimer}
+          isActive={isActive}
+          setIsActive={setIsActive}
         />
         <TimerSettings
-        isBreak={isBreak}
-        setIsBreak={setIsBreak}
-        fixedTimer={fixedTimer}
-        setFixedTimer={setFixedTimer}
-        timer={timer}
-        setTimer={setTimer}
-        isActive={isActive}
-        setIsActive={setIsActive}
+          isBreak={isBreak}
+          setIsBreak={setIsBreak}
+          fixedTimer={fixedTimer}
+          setFixedTimer={setFixedTimer}
+          timer={timer}
+          setTimer={setTimer}
+          isActive={isActive}
+          setIsActive={setIsActive}
         />
       </div>
     </>

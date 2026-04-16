@@ -20,22 +20,14 @@ export default function TimerSettings({ isBreak, setIsBreak, fixedTimer, setFixe
     const [breakMinutes, setBreakMinutes] = useState(5);
     const [breakSeconds, setBreakSeconds] = useState(0);
 
-    const BreakTimer = (e?: React.FormEvent) => {
+    const StudyAndBreakTimer = (e?: React.FormEvent) => {
         if(e) e.preventDefault();
         const breakTimer = (Number(breakMinutes*60)+Number(breakSeconds));
+        const studyTimer = (Number((studyMinutes*60))+Number(studySeconds));
         if(isBreak) {
             setFixedTimer(breakTimer);
             setTimer(breakTimer);
-        }
-        setIsActive(false);
-        setIsOpen(false);
-    };
-
-    const StudyTimer = (e?: React.FormEvent) => {
-        if(e) e.preventDefault();
-        const studyTimer = (Number((studyMinutes*60))+Number(studySeconds));
-        setFixedTimer(studyTimer);
-        if(!isBreak) {
+        } else {
             setFixedTimer(studyTimer);
             setTimer(studyTimer);
         }
@@ -60,10 +52,13 @@ export default function TimerSettings({ isBreak, setIsBreak, fixedTimer, setFixe
     useEffect(() => {
         const studyTimer = (Number((studyMinutes*60))+Number(studySeconds));
         const breakTimer = (Number(breakMinutes*60)+Number(breakSeconds));
-        if(isBreak)
+        if(isBreak) {
             setFixedTimer(breakTimer);
-        else
+            setTimer(breakTimer);
+        } else {
             setFixedTimer(studyTimer);
+            setTimer(studyTimer);
+        }
     },[isBreak]);
 
     return (
@@ -73,9 +68,9 @@ export default function TimerSettings({ isBreak, setIsBreak, fixedTimer, setFixe
                 <div className="modal-overlay">
                 <div className="modal-content">
                     <h1>Timer Settings</h1>
-                    <form onSubmit={StudyTimer}>
-                        <label>Set Study Timer:</label>
+                    <form onSubmit={StudyAndBreakTimer}>
                         <div className='input-row'>
+                            <label>Study Timer:</label>
                             <input 
                                 type='number'
                                 min={0}
@@ -104,11 +99,8 @@ export default function TimerSettings({ isBreak, setIsBreak, fixedTimer, setFixe
                                 placeholder='Seconds'
                             />
                         </div>
-                        <button type='submit'>Change Timer</button>
-                    </form>
-                    <form onSubmit={BreakTimer}>
-                        <label>Set Break Timer:</label>
                         <div className='input-row'>
+                            <label>Break Timer:</label>
                             <input 
                                 type='number'
                                 min={0}
@@ -136,10 +128,9 @@ export default function TimerSettings({ isBreak, setIsBreak, fixedTimer, setFixe
                                 }} 
                                 placeholder='Seconds'
                             />
-                        </div>
+                        </div>                
                         <button type='submit'>Change Timer</button>
                     </form>
-                    <br/>
                     <button onClick={() => setIsOpen(false)}>Close</button>
                 </div>
                 </div>
@@ -290,6 +281,11 @@ export default function TimerSettings({ isBreak, setIsBreak, fixedTimer, setFixe
                     font-size: 1.5rem;
                     text-align: center;
                     font-family: 'Courier New', monospace;
+                }
+                input::-webkit-outer-spin-button,
+                input::-webkit-inner-spin-button {
+                -webkit-appearance: none;
+                margin: 0;
                 }
             `}</style>
         </div>

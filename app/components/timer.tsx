@@ -48,8 +48,27 @@ export default function Timer({ isBreak, setIsBreak, fixedTimer, setFixedTimer, 
     return (
         <div>
             <h1>{formatTime(timer)}</h1>
-            <button type='button' onClick={toggleTimer}>{isActive? 'Pause': 'Start'}</button>
-            <button type='button' onClick={resetTimer}>Reset</button>
+            <div className='button-row'>
+                <button type='button' onClick={toggleTimer}>{isActive? 'Pause': 'Start'}</button>
+                <button type='button' onClick={resetTimer}>Reset</button>
+            </div>
+            <style jsx>{`
+                .button-row {
+                    display: flex;
+                    flex-direction: row; /* This forces the horizontal line */
+                    justify-content: center;
+                    align-items: center;
+                    gap: 15px; /* Adjust this for more/less space between buttons */
+                    margin-top: 10px;
+                    width: 100%;
+                }
+
+                /* Ensure the buttons don't stretch weirdly */
+                .button-row button {
+                    min-width: 120px;
+                    margin: 0; /* Clear any old margins that might interfere */
+                }
+            `}</style>
         </div>
     );
 };
