@@ -56,6 +56,15 @@ export default function TimerSettings({ isBreak, setIsBreak, fixedTimer, setFixe
         }
     }, [timer]);
 
+    useEffect(() => {
+        const studyTimer = (Number((studyMinutes*60))+Number(studySeconds));
+        const breakTimer = (Number(breakMinutes*60)+Number(breakSeconds));
+        if(isBreak)
+            setFixedTimer(breakTimer);
+        else
+            setFixedTimer(studyTimer);
+    },[isBreak]);
+
     return (
         <div>
             <button onClick={() => setIsOpen(true)}>Settings</button>
