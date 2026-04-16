@@ -11,7 +11,7 @@ export default function page() {
   const [isActive, setIsActive] = useState(false);
   return (
     <>
-      <h1>{isBreak ? "Break" : "Study"}</h1>
+      <h1>{isBreak ? "BREAK TIME" : "STUDY TIME"}</h1>
       <div>
         <Timer 
         isBreak={isBreak}
